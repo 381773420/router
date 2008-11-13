@@ -114,7 +114,7 @@ class RouteSetTest < Test::Unit::TestCase
       :token => "123456"
     }, @set.recognize_path("GET", "/123456/posts.xml"))
 
-    assert_nil @set.recognize_path("GET", "/messages/2")
+    assert_raise(Routing::RoutingError) { @set.recognize_path("GET", "/messages/2") }
   end
 
   # def test_generate

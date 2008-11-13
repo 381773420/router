@@ -24,7 +24,9 @@ module Routing
       def recognize_path(method, path)
         segments = Leaf.split_into_plain_segments(path)
         segments.freeze # remove this for performance reasons
-        walk(method, segments)
+        result = walk(method, segments) and return result
+
+        raise RoutingError, "No route matches #{path.inspect} with #{method.inspect}"
       end
 
       def walk(method, segments)

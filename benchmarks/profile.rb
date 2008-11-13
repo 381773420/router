@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'ruby-prof'
+
 def gc_statistics(description = "", options = {})
   raise unless GC.respond_to? :enable_stats
 
@@ -26,6 +29,14 @@ end
 require "#{File.dirname(__FILE__)}/../lib/routing"
 Routing::Routes.draw(&Map)
 
-gc_statistics do
+# gc_statistics do
+#   Routing::Routes.recognize_path("GET", "/posts/1/edit")
+# end
+
+result = RubyProf.profile do
   Routing::Routes.recognize_path("GET", "/posts/1/edit")
 end
+
+printer = RubyProf::FlatPrinter.new(result)
+# printer = RubyProf::GraphHtmlPrinter.new(result)
+printer.print(STDOUT, 0)

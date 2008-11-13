@@ -1,4 +1,23 @@
 module Routing
+  class RoutingError < StandardError #:nodoc:
+    attr_reader :failures
+    def initialize(message, failures=[])
+      super(message)
+      @failures = failures
+    end
+  end
+
+  class MethodNotAllowed < StandardError #:nodoc:
+    attr_reader :allowed_methods
+
+    def initialize(*allowed_methods)
+      super("Only #{allowed_methods.to_sentence} requests are allowed.")
+    end
+  end
+
+  class NotImplemented < StandardError #:nodoc:
+  end
+
   class RouteSet
     class Mapper
       def initialize(set)
