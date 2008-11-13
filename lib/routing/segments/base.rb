@@ -11,7 +11,7 @@ module Routing
         @children = Array.new
       end
 
-      def match!(node)
+      def =~(node)
         raise NotImplemented, "#{self.class} should implement match"
       end
 
@@ -48,7 +48,7 @@ module Routing
 
         segment = segments[position]
         @children.each do |child|
-          if child.match!(segment)
+          if child =~ segment
             if route = child.walk(segments, position + 1)
               return route
             end

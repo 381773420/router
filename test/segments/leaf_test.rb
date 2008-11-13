@@ -40,8 +40,8 @@ class LeafTest < Test::Unit::TestCase
 
   def test_match
     segment = LeafSegment.new("/people/show/:id", :controller => "people", :action => "show")
-    assert_equal true, segment.match!(nil)
-    assert_equal false, segment.match!(false)
+    assert_equal true, segment =~ nil
+    assert_equal false, segment =~ false
   end
 
   def test_walk

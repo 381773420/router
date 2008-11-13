@@ -59,7 +59,7 @@ module Routing
         end
       end
 
-      def match!(segment)
+      def =~(segment)
         segment.nil?
       end
 

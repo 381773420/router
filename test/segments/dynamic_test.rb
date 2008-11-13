@@ -9,7 +9,7 @@ class DynamicTest < Test::Unit::TestCase
     assert_equal :controller, segment.to_sym
     assert_equal '":controller"', segment.inspect
 
-    assert_equal true, segment.match!("people")
+    assert_equal true, segment =~ "people"
   end
 
   def test_create_id_dynamic_segment_with_requirements
@@ -18,8 +18,8 @@ class DynamicTest < Test::Unit::TestCase
     assert_equal :id, segment.to_sym
     assert_equal '":id (/[0-9]+/)"', segment.inspect
 
-    assert_equal true, segment.match!("1")
-    assert_equal false, segment.match!("edit")
+    assert_equal true, segment =~ "1"
+    assert_equal false, segment =~ "edit"
   end
 
   def test_does_eql_other_segment

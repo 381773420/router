@@ -13,7 +13,7 @@ module Routing
         ""
       end
 
-      def match!(node)
+      def =~(node)
         raise ArgumentError, "Root segment can not be matched"
       end
 
@@ -31,7 +31,7 @@ module Routing
 
       def walk(method, segments)
         @children.each do |child|
-          if child.match!(method)
+          if child =~ method
             if route = child.walk(segments)
               return route
             end

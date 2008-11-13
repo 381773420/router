@@ -33,6 +33,6 @@ class MethodTest < Test::Unit::TestCase
 
   def test_match
     segment = MethodSegment.new(:get)
-    segment.match!("GET")
+    segment =~ "GET"
   end
 end

@@ -12,6 +12,6 @@ class RootTest < Test::Unit::TestCase
 
   def test_match
     segment = RootSegment.new
-    assert_raise(ArgumentError) { segment.match!(nil) }
+    assert_raise(ArgumentError) { segment =~ nil }
   end
 end

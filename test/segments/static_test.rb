@@ -19,6 +19,6 @@ class StaticTest < Test::Unit::TestCase
 
   def test_match
     segment = StaticSegment.new("people")
-    assert_equal true, segment.match!("people")
+    assert_equal true, segment =~ "people"
   end
 end

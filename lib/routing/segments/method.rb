@@ -36,7 +36,7 @@ module Routing
         @symbol
       end
 
-      def match!(node)
+      def =~(node)
         @string == node
       end
     end

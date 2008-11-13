@@ -17,7 +17,7 @@ module Routing
           self.value.eql?(segment.value)
       end
 
-      def match!(node)
+      def =~(node)
         @value == node
       end
     end

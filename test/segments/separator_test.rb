@@ -23,6 +23,6 @@ class SeparatorTest < Test::Unit::TestCase
 
   def test_match
     segment = SeparatorSegment.new("/")
-    assert_equal true, segment.match!("/")
+    assert_equal true, segment =~ "/"
   end
 end

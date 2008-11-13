@@ -40,7 +40,7 @@ module Routing
           self.requirements.eql?(segment.requirements)
       end
 
-      def match!(segment)
+      def =~(segment)
         result = if @requirements
           @requirements =~ segment
         else
