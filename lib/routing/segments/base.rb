@@ -58,6 +58,32 @@ module Routing
         nil
       end
 
+      # def walk(segments, position = 0)
+      #   optimized_walk(segments, position)
+      # end
+      # 
+      # def unwrap_walker_loop!
+      #   source = ""
+      #   source += %{
+      #     def optimized_walk(segments, position = 0)
+      #       segment = segments[position]}
+      #   @children.each_with_index do |child, index|
+      #     source += %{
+      #         child = @children[#{index}]
+      #         if child =~ segment
+      #           if route = child.walk(segments, position + 1)
+      #             return route
+      #           end
+      #         end}
+      #     end
+      #   source += %{
+      #       nil
+      #     end
+      #   }
+      # 
+      #   instance_eval(source)
+      # end
+
       def to_graph
         nodes = graph_label + "\n"
         nodes += descendants.map { |node| node.send :graph_label }.join("\n")
