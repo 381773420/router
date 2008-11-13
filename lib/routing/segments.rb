@@ -1,0 +1,7 @@
+require 'routing/segments/base'
+require 'routing/segments/dynamic'
+require 'routing/segments/leaf'
+require 'routing/segments/method'
+require 'routing/segments/root'
+require 'routing/segments/static'
+require 'routing/segments/separator'
