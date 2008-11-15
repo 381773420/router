@@ -64,10 +64,6 @@ module Routing
       end
 
       def walk(segments, position)
-        extract_params(segments)
-      end
-
-      def extract_params(segments)
         params = @options.dup
         @params_mapping.each do |key, value|
           params[key] = segments[value]

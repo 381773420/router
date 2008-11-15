@@ -44,9 +44,15 @@ class LeafTest < Test::Unit::TestCase
     assert_equal false, segment =~ false
   end
 
-  def test_walk
-    segment = LeafSegment.new("/people/show/:id", :controller => "people", :action => "show")
-    assert_equal({:controller => "people", :id => "1", :action => "show"}, segment.walk(["/", "people", "/", "show", "/", "1"], 5))
+  def test_extract_params
+    s = LeafSegment.new("/people", :controller => "people", :action => "index")
+    assert_equal({:controller => "people", :action => "index"}, s.walk(["/", "people"], 1))
+
+    s = LeafSegment.new("/people/show/:id", :controller => "people", :action => "show")
+    assert_equal({:controller => "people", :action => "show", :id => "1"}, s.walk(["/", "people", "/", "show", "/", "1"], 5))
+
+    s = LeafSegment.new("/:controller/:action/:id")
+    assert_equal({:controller => "people", :action => "show", :id => "1"}, s.walk(["/", "people", "/", "show", "/", "1"], 5))
   end
 
   def test_does_eql_other_segment
@@ -63,14 +69,4 @@ class LeafTest < Test::Unit::TestCase
     assert_equal false, s2.eql?(s1)
   end
 
-  def test_extract_params
-    s = LeafSegment.new("/people", :controller => "people", :action => "index")
-    assert_equal({ :controller => "people", :action => "index" }, s.extract_params(["/", "people"]))
-
-    s = LeafSegment.new("/people/show/:id", :controller => "people", :action => "show")
-    assert_equal({ :controller => "people", :action => "show", :id => "1" }, s.extract_params(["/", "people", "/", "show", "/", "1"]))
-
-    s = LeafSegment.new("/:controller/:action/:id")
-    assert_equal({ :controller => "people", :action => "show", :id => "1" }, s.extract_params(["/", "people", "/", "show", "/", "1"]))
-  end
 end
