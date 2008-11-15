@@ -57,6 +57,7 @@ module Routing
         Segments::Method.create(method).map do |segment|
           root.build(segments.dup.unshift(segment), self)
         end
+        self
       end
 
       def =~(segment)

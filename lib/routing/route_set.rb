@@ -28,9 +28,14 @@ module Routing
         @set.add_route(path, options)
       end
 
+      def named_route(name, path, options = {})
+        @set.add_named_route(name, path, options)
+      end
+
       def resources(resource, options = {})
-        connect "/#{resource}", :controller => "#{resource}", :action => "index", :conditions => { :method => :get }
-        connect "/#{resource}.:format", :controller => "#{resource}", :action => "index", :conditions => { :method => :get }
+        send("#{resource}", "/#{resource}", :controller => "#{resource}", :action => "index", :conditions => { :method => :get })
+        send("formatted_#{resource}", "/#{resource}.:format", :controller => "#{resource}", :action => "index", :conditions => { :method => :get })
+
         connect "/#{resource}", :controller => "#{resource}", :action => "create", :conditions => { :method => :post }
         connect "/#{resource}.:format", :controller => "#{resource}", :action => "create", :conditions => { :method => :post }
         connect "/#{resource}/new", :controller => "#{resource}", :action => "new", :conditions => { :method => :get }
@@ -44,10 +49,18 @@ module Routing
         connect "/#{resource}/:id", :controller => "#{resource}", :action => "destroy", :conditions => { :method => :delete }
         connect "/#{resource}/:id.:format", :controller => "#{resource}", :action => "destroy", :conditions => { :method => :delete }
       end
+
+      def method_missing(route_name, *args, &proc)
+        super unless args.length >= 1 && proc.nil?
+        @set.add_named_route(route_name, *args)
+      end
     end
+
+    attr_reader :named_routes
 
     def initialize
       @root = Segments::Root.new
+      @named_routes = NamedRouteCollection.new
     end
 
     def draw
@@ -60,12 +73,20 @@ module Routing
       @root.add_route(path, options)
     end
 
+    def add_named_route(name, path, options = {})
+      named_routes[name.to_sym] = add_route(path, options)
+    end
+
     def recognize_path(method, path)
       @root.recognize_path(method, path)
     end
 
     def generate(options)
       @root.generate(options)
+    end
+
+    def lookup_named_route(name)
+      named_routes[name.to_sym]
     end
 
     def freeze

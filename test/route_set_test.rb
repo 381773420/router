@@ -6,14 +6,17 @@ class RouteSetTest < Test::Unit::TestCase
 
     @set.draw do |map|
       map.resources :posts
-      map.connect ":token/posts.xml", :controller => "posts", :action => "index", :format => "xml"
+      map.posts_xml ":token/posts.xml", :controller => "posts", :action => "index", :format => "xml"
 
       map.resources :people
 
       map.connect 'session', :controller => "sessions", :action => "create", :conditions => { :method => :get }
       map.connect 'login/authenticate', :controller => "sessions", :action => "create", :conditions => { :method => :get }
 
-      map.connect 'login', :controller => "sessions", :action => "new", :conditions => { :method => :get }
+      map.open_id_complete 'session', :controller => "sessions", :action => "create", :conditions => { :method => :get }
+      map.authenticate 'login/authenticate', :controller => "sessions", :action => "create", :conditions => { :method => :get }
+
+      map.login 'login', :controller => "sessions", :action => "new", :conditions => { :method => :get }
       map.resources :session
 
       map.connect ':controller/:action/:id'
@@ -124,6 +127,13 @@ class RouteSetTest < Test::Unit::TestCase
   #     :variable => "variable"
   #   })
   # end
+
+  def test_lookup_named_route
+    assert_equal "/people", @set.lookup_named_route(:people_path)
+    assert_equal "/session", @set.lookup_named_route(:open_id_complete_path)
+    assert_equal "/login/authenticate", @set.lookup_named_route(:authenticate_path)
+    assert_equal "/login", @set.lookup_named_route(:login_path)
+  end
 
   def test_add_route_with_frozen_set
     assert_raise(RuntimeError) do
