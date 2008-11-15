@@ -10,7 +10,7 @@ module Routing
           raise ArgumentError, "Base is an abstract class"
         end
 
-        @children = Array.new
+        @children = Collection.new
       end
 
       def =~(node)
@@ -23,7 +23,6 @@ module Routing
 
       def freeze
         @children.freeze
-        @children.each { |child| child.freeze }
         super
       end
 
@@ -88,30 +87,13 @@ module Routing
 
       protected
         def push(node)
-          raise ArgumentError unless node.is_a?(Base)
-
-          if existing_node = find_existing_node(node)
-            return existing_node
-          else
-            @children << node
-            return node
-          end
+          @children.detect_or_push(node)
         end
 
         def close(leaf)
           slash = Separator.new("/")
           push(leaf)
           push(slash).push(leaf)
-        end
-
-      private
-        def find_existing_node(node)
-          existing_node = nil
-          @children.reverse.each do |child|
-            existing_node = child if node.eql?(child)
-            break if child.is_a?(Dynamic)
-          end
-          existing_node
         end
     end
   end
