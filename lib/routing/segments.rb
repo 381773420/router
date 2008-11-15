@@ -1,3 +1,4 @@
+require 'routing/segments/graphable'
 require 'routing/segments/base'
 require 'routing/segments/dynamic'
 require 'routing/segments/leaf'

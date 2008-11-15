@@ -1,6 +1,8 @@
 module Routing
   module Segments
     class Base
+      include Graphable
+
       attr_reader :children
 
       def initialize
@@ -84,40 +86,7 @@ module Routing
       #   instance_eval(source)
       # end
 
-      def to_graph
-        nodes = graph_label + "\n"
-        nodes += descendants.map { |node| node.send :graph_label }.join("\n")
-
-        relationships = graph_relationships
-        relationships += descendants.map { |parent| parent.graph_relationships }.join("\n")
-
-        "digraph routes {\n#{nodes}\n#{relationships}\n}"
-      end
-
       protected
-        def graph_node_id
-          "node#{object_id}"
-        end
-
-        def graph_label
-          "#{graph_node_id}[shape=circle,height=.5,label=#{inspect.inspect}];"
-        end
-
-        def graph_relationships
-          children.map { |child| "#{graph_node_id} -> #{child.graph_node_id};" }.join("\n")
-        end
-
-        def descendants
-          descendants = []
-          @children.each do |child|
-            descendants << child
-            child.descendants.each do |descendant|
-              descendants << descendant
-            end
-          end
-          descendants
-        end
-
         def push(node)
           raise ArgumentError unless node.is_a?(Base)
 

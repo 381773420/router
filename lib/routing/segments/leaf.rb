@@ -71,11 +71,6 @@ module Routing
         params
       end
 
-      protected
-        def graph_label
-          "#{graph_node_id}[shape=doublecircle,height=.5,label=#{inspect}];"
-        end
-
       private
         def segments
           self.class.split_into_plain_segments(path.dup).map do |segment|
