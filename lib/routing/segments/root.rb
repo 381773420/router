@@ -32,7 +32,7 @@ module Routing
       def walk(method, segments)
         @children.each do |child|
           if child =~ method
-            if route = child.walk(segments)
+            if route = child.walk(segments, 0)
               return route
             end
           end

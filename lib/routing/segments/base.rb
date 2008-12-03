@@ -42,31 +42,34 @@ module Routing
         parent.close(leaf)
       end
 
-      def walk(segments, position = 0)
-        unless frozen?
-          raise RuntimeError, "Can not traverse unfrozen Segment"
-        end
+      # Include native walker
+      include RouterExt
 
-        segment = segments[position]
-        @children.each do |child|
-          if child =~ segment
-            if route = child.walk(segments, position + 1)
-              return route
-            end
-          end
-        end
+      # def walk(segments, position)
+      #   unless frozen?
+      #     raise RuntimeError, "Can not traverse unfrozen Segment"
+      #   end
+      # 
+      #   segment = segments[position]
+      #   @children.each do |child|
+      #     if child =~ segment
+      #       if route = child.walk(segments, position + 1)
+      #         return route
+      #       end
+      #     end
+      #   end
+      # 
+      #   nil
+      # end
 
-        nil
-      end
-
-      # def walk(segments, position = 0)
+      # def walk(segments, position)
       #   optimized_walk(segments, position)
       # end
       # 
       # def unwrap_walker_loop!
       #   source = ""
       #   source += %{
-      #     def optimized_walk(segments, position = 0)
+      #     def optimized_walk(segments, position)
       #       segment = segments[position]}
       #   @children.each_with_index do |child, index|
       #     source += %{
@@ -81,7 +84,6 @@ module Routing
       #       nil
       #     end
       #   }
-      # 
       #   instance_eval(source)
       # end
 
